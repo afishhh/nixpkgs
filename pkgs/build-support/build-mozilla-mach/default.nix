@@ -318,12 +318,15 @@ buildStdenv.mkDerivation {
     ++
       lib.optionals
         (
-          lib.versionAtLeast version "141.0.2"
+          (lib.versionAtLeast version "141.0.2" && lib.versionOlder version "145.0")
           || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
         )
         [
           ./142-relax-apple-sdk.patch
         ]
+    ++ lib.optionals (lib.versionAtLeast version "145.0") [
+      ./145-relax-apple-sdk.patch
+    ]
     ++ extraPatches;
 
   postPatch = ''
