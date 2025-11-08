@@ -1,17 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkgsBuildBuild,
-
-  go,
-  darwin,
-  nixosTests,
-
-  nix-update-script,
-
-  target ? "syncthing",
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkgsBuildBuild
+, go
+, darwin
+, nixosTests
+, nix-update-script
+, target ? "syncthing"
+,
 }:
 
 assert builtins.elem target [
@@ -21,17 +18,17 @@ assert builtins.elem target [
 ];
 
 buildGoModule (finalAttrs: {
-  pname = "syncthing";
-  version = "2.1.3";
+  pname = target;
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uTjmOAjis2eBm2SnZbyvDDiQXKN8De+DhjNHbFLLbn0=";
+    hash = "sha256-GKyzJ2kzs2h/tfb3StSleGBofiKk6FwVcSkCjsJRvRY=";
   };
 
-  vendorHash = "sha256-ueUf9YEa5z7mG6MofIJ3Xco+PxVPi/85Rdi+1aean6c=";
+  vendorHash = "sha256-Soky/3wEmP1QRy8xfL68sTHi3CSl4nbCINmG0DY2Qys=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Recent versions of macOS seem to require binaries to be signed when
@@ -114,14 +111,12 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://syncthing.net/";
     description = "Open Source Continuous File Synchronization";
-    donationPage = "https://syncthing.net/donations/";
     changelog = "https://github.com/syncthing/syncthing/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       joko
       noahbiewesch
       peterhoeg
-      zainkergaye
     ];
     mainProgram = target;
     platforms = lib.platforms.unix;
